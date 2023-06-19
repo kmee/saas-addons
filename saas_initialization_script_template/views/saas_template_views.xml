@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="saas_template_form_view" model="ir.ui.view">
+        <field name="name">saas.template.form.view</field>
+        <field name="model">saas.template</field>
+        <field name="inherit_id" ref="saas.saas_template_form_view" />
+        <field name="arch" type="xml">
+            <field name="template_post_init" position='before'>
+                <field name='template_initialization_template_id' domain="[('initialization_type','=','template')]"/>
+            </field>
+            <field name="build_post_init" position='before'>
+                <field name='build_initialization_template_id' domain="[('initialization_type','=','build')]"/>
+            </field>
+        </field>
+    </record>
+</odoo>
