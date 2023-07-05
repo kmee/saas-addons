@@ -4,8 +4,11 @@ import os
 import glob
 import logging
 import tempfile
+import urllib.request
+import urllib.error
 from string import Template
 from shutil import copytree
+from datetime import datetime
 from unicodedata import normalize
 import gitlab
 
@@ -27,6 +30,12 @@ CONFIG_PARAMS = [
     'deployment_committer_email'
 ]
 
+STATES = [
+    ('draft', 'Draft'),
+    ('offline', 'Offline'),
+    ('online', 'Online'),
+    ('error', 'Error')
+]
 
 def sanitize_string(string):
     string = string.replace(' ', '-')
@@ -38,6 +47,20 @@ def sanitize_string(string):
 class SaasOperator(models.Model):
 
     _inherit = "saas.operator"
+
+    state = fields.Selection(
+        string='State',
+        default='draft',
+        selection=STATES,
+    )
+
+    state_message = fields.Char(
+        string='State Message',
+    )
+
+    last_state_update = fields.Datetime(
+        string='Last State Update'
+    )
 
     def create_operator_deployment(self):
         """
@@ -56,6 +79,7 @@ class SaasOperator(models.Model):
         deploy_repo = self._get_gitlab_deploy_repo()
         changes_action = self._prepare_deployment(values)
         self._commit_deployment(deploy_repo, changes_action, values)
+        self.update_remote_operator_status()
 
     def _is_all_config_params_valid(self):
         for param in CONFIG_PARAMS:
@@ -161,4 +185,40 @@ class SaasOperator(models.Model):
         else:
             _logger.info("New operator deployed %s. Commit: %s", values.get("version"), commit)
 
+    def update_remote_operator_status(self):
+        state = self.check_remote_operator_status()
+
+        self.state = state[0]
+        self.state_message = state[1]
+        self.last_state_update = fields.Datetime.now()
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }
+
+    def check_remote_operator_status(self):
+        """
+        Check if an operator is online through a request in the URL where it should resolve
+        :return (str): Operator status
+        """
+        try:
+            response = urllib.request.urlopen(f"http://{self.remote_instance_url}")
+        except (urllib.error.HTTPError, urllib.error.URLError) as error:
+            message = f"Operator is not online (Error:{error}). Operator: {self.name}. URL: {self.remote_instance_url}."
+            _logger.info(message)
+            return ("offline", message)
+        except Exception as error:
+            message = f"Error checking if operator is online: {error}. Probably because it is still offline. Operator: {self.name}. URL: {self.remote_instance_url}."
+            _logger.error(message)
+            return ("error", message)
+
+        if response.getcode() == 200:
+            message = f"Operator {self.name} Online. URL: {self.remote_instance_url}."
+            _logger.info(message)
+            return ("online", message)
+        else:
+            message = f"Operator is not online (Response Code: {response.getcode()}). Operator: {self.name}. URL: {self.remote_instance_url}."
+            _logger.info(message)
+            return ("offline", message)
 
