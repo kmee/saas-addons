@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 KMEE
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="saas_operator_form_view">
+        <field name="name">saas.operator.form (in erplivre_saas)</field>
+        <field name="model">saas.operator</field>
+        <field name="inherit_id" ref="saas.saas_operator_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr='//sheet' position='before'>
+                <header>
+                    <button
+                        name="create_operator_deployment"
+                        class="oe_highlight"
+                        string="Deploy Operator"
+                        type="object"
+                        groups="saas.group_manager"
+                        attrs="{'invisible': ['|', ('type', '!=', 'remote'), ('version_id', '=', False)]}"
+                    />
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

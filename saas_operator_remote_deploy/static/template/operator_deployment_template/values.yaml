@@ -1,0 +1,251 @@
+replicaCount: 1
+
+image:
+  repository: registry.kmee.com.br/erplivre/erplivre-odoo
+  tag: "${TAG}"
+  pullPolicy: IfNotPresent
+  
+
+imagePullSecrets:
+  - name: registry-erplivre-all
+
+nameOverride: "${OPERATOR_NAME}-odoo-hml"
+fullnameOverride: "${OPERATOR_NAME}-odoo-hml"
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "${OPERATOR_NAME}-odoo-hml"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {
+    kubernetes.io/ingress.class: nginx,
+    kubernetes.io/tls-acme: "true",
+    cert-manager.io/cluster-issuer: letsencrypt-hml,
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m,
+    nginx.ingress.kubernetes.io/client-max-body-size: 50m,
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 50m,
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "720s",
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "720s",
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1200s",
+    meta.helm.sh/release-name: erplivre14-odoo-hml,
+    meta.helm.sh/release-namespace: fleet-local
+    # nginx.ingress.kubernetes.io/rewrite-target: /,
+    # nginx.ingress.kubernetes.io/use-regex: "true"
+  }
+  hosts:
+    - host: "${OPERATOR_NAME}.kmee.dev.br"
+      type: NodePort
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          name: http
+          port: 8069
+        - path: /longpooling
+          pathType: ImplementationSpecific        
+          name: longpooling
+          port: 8072
+    - host: "*.erplivre.com.br"
+      type: NodePort
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          name: http
+          port: 8069
+        - path: /longpooling
+          pathType: ImplementationSpecific        
+          name: longpooling
+          port: 8072
+    # - host: erplivre.com.br
+    #   type: NodePort
+    #   paths:
+    #     - path: /web/database/selector(/|$)(.*)
+    #       pathType: ImplementationSpecific
+    #       name: rewrite
+    #       port: 80
+  tls:
+   - secretName: wildcard-erplivre
+     hosts:
+       - "*.erplivre.com.br"
+   - secretName: erplivre-saas-14-odoo-hml-tls
+     hosts:
+       - "${OPERATOR_NAME}.kmee.dev.br"
+  loadBalancer:
+    - ingress:
+      hosts:
+        - 10.10.6.13
+
+# resources: {
+#   limits: {
+#     cpu: 2400m,
+#     memory: 4096Mi
+#   },
+#   requests: {
+#     cpu: 2400m,
+#     memory: 4096Mi
+#   }
+# }
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 20
+  targetMemoryUtilizationPercentage: 20
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+preCreateDataBase:
+  enabled: false
+  PGHOST: "10.10.6.163"
+  PGUSER: "odoo"
+  PGPASSWORD: "odoo"
+  #PGDATABASE: "erplivre14-odoo-hml"
+
+odoo:
+  - name: EMAIL_FROM
+    value: "bot@mail.erplivre.com.br"
+  - name: SMTP_SERVER
+    #value: "erplivre14-odoo-hml-smtp"
+    value: "mg-saas-01.erplivre.com.br"
+  - name: SMTP_PORT
+    value: "25"
+  - name: PROXY_MODE
+    value: "true"
+  - name: LIST_DB
+    value: "true"
+  - name: DB_FILTER
+    value: "^%d$"
+  - name: DOODBA_ENVIRONMENT
+    value: "hml"
+  - name: INITIAL_LANG
+    value: "pt_BR"
+  - name: ADMIN_PASSWORD
+    value: "qwbJFnj4i@$%##@#!owVr1G3cimPvzYQ!!!mODYXTB"
+  - name: PGHOST
+    value: "10.10.6.206"
+  - name: PGUSER
+    value: "odoo"
+  - name: PGPASSWORD
+    value: "mudar@123"
+  - name: PGDATABASE
+    value: "False"
+  - name: AWS_HOST
+    value: "s3.wasabisys.com"
+  - name: AWS_REGION
+    value: "us-east-1"
+  - name: AWS_ACCESS_KEY_ID
+    #value: "WZC2LALJS31QT358GHQH" #ananias@kmee.com.br
+    value: "E92RMYZJAZE8X5QP1ES5" #infra@kmee.com.br
+  - name: AWS_SECRET_ACCESS_KEY
+    #value: "p6ukrbodmF6bnWUjUg3qjAkqkaBv0MtrJcglpgVc" #ananias@kmee.com.br
+    value: "z8Y5Vn20YRdHGvg8NFe1LYuXlsJVDrymCNuYABIe" #infra@kmee.com.br
+  - name: AWS_BUCKETNAME
+    value: "{db}-{version}-erplivre-hml"
+  - name: AWS_BUCKETNAME_UNSTRUCTURED
+    value: "True"
+  - name: ODOO_SESSION_REDIS
+    value: "1"
+  - name: ODOO_SESSION_REDIS_HOST
+    value: "10.10.6.156"
+  - name: ODOO_SESSION_REDIS_PREFIX
+    value: "${OPERATOR_NAME}-odoo-hml"
+  - name: ODOO_SESSION_REDIS_PASSWORD
+    value: "RV06LACREVE796QWC2DM"
+  - name: SUPER_ADMIN_PASSWORD
+    value: "N[WnxxQ=o&^sAN[Wnx!@@xQ=o&^sA"
+  - name: GELF_ENABLED
+    value: "1"
+  - name: GELF_HOST
+    value: "graylog.kmee.com.br"
+  - name: GELF_PORT
+    value: "21201"
+  - name: GELF_LOCALNAME
+    value: "${OPERATOR_NAME}-odoo-hml"
+  - name: RUNNING_ENV
+    value: "hml"
+  - name: MARABUNTA_MODE
+    value: "hml"
+  - name: DEMO
+    value: "False"
+  - name: WITHOUT_DEMO
+    value: "True"
+  - name: LIMIT_MEMORY_SOFT
+    value: "2147483648"
+  - name: LIMIT_MEMORY_HARD
+    value: "2684354560"
+  - name: LIMIT_REQUEST
+    value: "8192"
+  - name: LIMIT_TIME_CPU
+    value: "600"
+  - name: LIMIT_TIME_REAL
+    value: "1200"
+  - name: LIMIT_TIME_REAL_CRON
+    value: "1200"
+  - name: MARABUNTA_ALLOW_SERIE
+    value: "True"
+  - name: MARABUNTA_FORCE_VERSION
+    value: "False"
+  - name: WORKERS
+    value: "7"
+  - name: "MAIL_TOKEN"
+    value: "12cb8ea7-fae2-453d-9034-fe961f9502f7"
+
+smtp:
+  enabled: false
+  name: ${OPERATOR_NAME}-odoo-hml-smtp
+  serviceType: NodePort
+  image: tecnativa/postfix-relay
+  pullPolicy: Always
+  ports:
+    - containerPort: 25
+      name: 25-smtp
+    - containerPort: 465
+      name: 465-smtps
+    - containerPort: 587
+      name: 587-submission
+  env:
+    - name: MAILNAME
+      value: "smtp-server"
+    - name: MAIL_RELAY_HOST
+      value: "mg-saas-01.erplivre.com.br"
+    - name: MAIL_RELAY_PORT
+      value: "25"
+    - name: MAIL_SIZE_LIMIT
+      value: "52428800"
+    # - name: MAIL_RELAY_USER
+    #   value: "None"
+    # - name: MAIL_RELAY_PASS
+    #   value: "None"
+    - name: MAIL_CANONICAL_DOMAINS
+      value: "mail.erplivre.com.br"
+    - name: MAIL_NON_CANONICAL_DEFAULT
+      value: "mail.erplivre.com.br"
+    - name: ROUTE_CUSTOM
+      value: 0.0.0.0/0
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podSecurityContext: {}
+  securityContext:
+    capabilities: 
+      - SYS_PTRACE
+  annotations: {}

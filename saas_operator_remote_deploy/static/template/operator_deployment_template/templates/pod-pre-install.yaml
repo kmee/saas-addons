@@ -1,0 +1,26 @@
+{{- if .Values.preCreateDataBase.enable -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "erplivre14-odoo-hml.fullname" . }}-pre-install"
+  #namespace: fleet-local
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  containers:
+    - name: create-database
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      command: [
+                '/bin/sh','-c', '
+                apk add postgresql15-client ;
+                export PGPASSWORD={{ .Values.preCreateDataBase.PGPASSWORD }} ;
+                psql -h {{ .Values.preCreateDataBase.PGHOST }} -U {{ .Values.preCreateDataBase.PGUSER }} -c "CREATE DATABASE \"{{ .Values.preCreateDataBase.PGDATABASE }}\";" 2> /dev/null;
+                psql -h {{ .Values.preCreateDataBase.PGHOST }} -U {{ .Values.preCreateDataBase.PGUSER }} -d {{ .Values.preCreateDataBase.PGDATABASE }} -c "CREATE EXTENSION unaccent;" 2> /dev/null;
+                exit 0'
+               ]
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 0
+{{- end }}
