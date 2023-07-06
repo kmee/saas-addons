@@ -1,0 +1,41 @@
+<odoo>
+    <record id='saas_initialization_template_view_tree' model='ir.ui.view'>
+        <field name="name">saas.initialization.template.tree</field>
+        <field name="model">saas.initialization.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Template Name" />
+                <field name="initialization_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="saas_initialization_template_form_view" model="ir.ui.view">
+        <field name="name">saas.initialization.template.form</field>
+        <field name="model">saas.initialization.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="initialization_type"/>
+                        <field name="template_post_init" widget="ace" options="{'mode': 'python'}" attrs="{'invisible': [('initialization_type','!=', 'template')]}"/>
+                        <field name="build_post_init" widget="ace" options="{'mode': 'python'}" attrs="{'invisible': [('initialization_type','!=', 'build')]}"/>
+                        <field name='build_post_init_line_ids' attrs="{'invisible': [('initialization_type','!=', 'build')]}">
+                        <tree editable='bottom'>
+                            <field name='key'/>
+                                <field name='value'/>
+                            </tree>
+                            <form string='Build post init form'>
+                                <group>
+                                    <field name='key'/>
+                                    <field name='value'/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
