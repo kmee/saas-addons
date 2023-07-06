@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 KMEE
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="saas_operator_version_form_view">
+        <field name="name">saas.operator.version.form (in saas_operator_version)</field>
+        <field name="model">saas.operator.version</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="image_tag"/>
+                        <field name="external_link" widget="url"/>
+                        <field name="operator_ids"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter"></div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="saas_operator_version_search_view">
+        <field name="name">saas.operator.version.search (in saas_operator_version)</field>
+        <field name="model">saas.operator.version</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="image_tag"/>
+                <field name="external_link"/>
+                <field name="operator_ids"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="saas_operator_version_tree_view">
+        <field name="name">saas.operator.version.tree (in saas_operator_version)</field>
+        <field name="model">saas.operator.version</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="image_tag"/>
+                <field name="external_link"/>
+                <field name="operator_ids"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="saas_operator_version_act_window">
+        <field name="name">Saas Operator Version</field>
+        <field name="res_model">saas.operator.version</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="saas_operator_version_menu">
+        <field name="name">Versions</field>
+        <field name="parent_id" ref="saas.saas_main_menu_config"/> <!-- TODO -->
+        <field name="action" ref="saas_operator_version_act_window"/>
+        <field name="sequence" eval="16"/>
+    </record>
+
+</odoo>

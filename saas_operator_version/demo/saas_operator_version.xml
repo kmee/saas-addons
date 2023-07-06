@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 KMEE
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo noupdate="1">
+
+    <record model="saas.operator.version" id="saas_operator_version_demo_1">
+       <field name="name">14.0.1.0.0</field>
+       <field name="description">Operator initial release in Odoo 14.0</field>
+       <field name="external_link">https://github.com/odoo/odoo/tree/14.0</field>
+       <field name="operator_ids" eval="[(6, 0, [ref('saas.local_operator')])]" />
+    </record>
+
+</odoo>

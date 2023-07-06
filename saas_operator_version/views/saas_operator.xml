@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 KMEE
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="saas_operator_form_view">
+        <field name="name">saas.operator.form (in saas_operator_version)</field>
+        <field name="model">saas.operator</field>
+        <field name="inherit_id" ref="saas.saas_operator_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="version_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="saas_operator_tree_view">
+        <field name="name">saas.operator.tree (in saas_operator_version)</field>
+        <field name="model">saas.operator</field>
+        <field name="inherit_id" ref="saas.saas_operator_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="version_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
