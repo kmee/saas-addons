@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "erplivre14-odoo-hml.fullname" . }}
+  labels:
+    {{- include "erplivre14-odoo-hml.labels" . | nindent 4 }}
+spec:
+  {{- range .Values.ingress.hosts }}
+  type: {{ .type }}
+  ports:
+    {{- range .paths }}
+    - port: {{ .port }}
+      name: {{ .name }}
+    {{- end }}
+  {{- end }}
+  selector:
+    app: {{ include "erplivre14-odoo-hml.fullname" . }}
+    tier: {{ include "erplivre14-odoo-hml.fullname" . }}

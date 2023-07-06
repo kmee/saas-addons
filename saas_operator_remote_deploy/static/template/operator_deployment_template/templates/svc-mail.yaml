@@ -1,0 +1,19 @@
+{{- if .Values.smtp.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "erplivre14-odoo-hml.mailFullname" . }}
+  labels:
+    {{- include "erplivre14-odoo-hml.mailLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.smtp.serviceType }}
+  ports:
+    {{- range .Values.smtp.ports }}
+    - port: {{ .containerPort }}
+      name: {{ .name }}
+      protocol: TCP
+      targetPort: {{ .containerPort }}
+    {{- end }}
+  selector:
+    app: {{ include "erplivre14-odoo-hml.mailFullname" . }}
+{{- end }}

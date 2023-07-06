@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 KMEE
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="saas_operator_form_view">
+        <field name="name">saas.operator.form (in erplivre_saas)</field>
+        <field name="model">saas.operator</field>
+        <field name="inherit_id" ref="saas.saas_operator_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr='//sheet' position='before'>
+                <header>
+                    <button
+                        name="create_operator_deployment"
+                        class="oe_highlight"
+                        string="Deploy Operator"
+                        type="object"
+                        groups="saas.group_manager"
+                        attrs="{'invisible': ['|', ('type', '!=', 'remote'), '|', ('version_id', '=', False),('state', '!=', 'draft')]}"
+                    />
+                    <button
+                        name="update_remote_operator_status"
+                        string="Update Status"
+                        type="object"
+                        groups="saas.group_manager"
+                        attrs="{'invisible': ['|', ('type', '!=', 'remote'), ('state', '=', 'draft')]}"
+                    />
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,online"
+                        attrs="{'invisible': [('type', '!=', 'remote')]}"
+                    />
+                </header>
+                <div
+                    class="alert alert-info"
+                    role="alert"
+                    attrs="{'invisible':[('state', '!=', 'online')]}"
+                >
+                    <field name="state_message" readonly='1'/>
+                    <br />
+                    <strong>
+                        Last update: <field name="last_state_update" readonly='1' t-options='{"widget": "datetime"}'/>
+                    </strong>
+                </div>
+                <div
+                    class="alert alert-danger"
+                    role="alert"
+                    attrs="{'invisible':[('state', 'in', ('draft', 'online'))]}"
+                >
+                    <field name="state_message" readonly='1'/>
+                    <br />
+                    <strong>
+                        Last update: <field name="last_state_update" readonly='1' t-options='{"widget": "datetime"}'/>
+                    </strong>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

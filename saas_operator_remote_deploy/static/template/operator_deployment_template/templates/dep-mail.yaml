@@ -1,0 +1,67 @@
+{{- if .Values.smtp.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "erplivre14-odoo-hml.mailFullname" . }}
+  labels:
+    {{- include "erplivre14-odoo-hml.mailLabels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "erplivre14-odoo-hml.mailSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "erplivre14-odoo-hml.mailSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "erplivre14-odoo-hml.mailServiceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.smtp.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.smtp.name }}
+          securityContext:
+            {{- toYaml .Values.smtp.securityContext | nindent 12 }}
+          image: {{ .Values.smtp.image }}
+          imagePullPolicy: {{ .Values.smtp.pullPolicy }}
+          env:
+            {{- range .Values.smtp.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+            {{- end }}
+          ports:
+            {{- range .Values.smtp.ports }}
+            - containerPort: {{ .containerPort }}
+              name: {{ .name | quote }}
+            {{- end }}
+          securityContext:
+            capabilities:
+              {{- range .Values.smtp.capabilities }}
+              add:
+              - {{ . }}
+              {{- end }}
+          resources:
+            {{- toYaml .Values.smtp.resources | nindent 12 }}
+      {{- with .Values.smtp.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.smtp.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.smtp.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
