@@ -8,6 +8,7 @@
        <field name="name">14.0.1.0.0</field>
        <field name="description">Operator initial release in Odoo 14.0</field>
        <field name="external_link">https://github.com/odoo/odoo/tree/14.0</field>
+       <field name="image_tag">14.0.1.0.0</field>
        <field name="operator_ids" eval="[(6, 0, [ref('saas.local_operator')])]" />
     </record>
 
