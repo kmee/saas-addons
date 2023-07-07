@@ -43,7 +43,7 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "720s",
     nginx.ingress.kubernetes.io/proxy-send-timeout: "720s",
     nginx.ingress.kubernetes.io/proxy-read-timeout: "1200s",
-    meta.helm.sh/release-name: erplivre14-odoo-hml,
+    meta.helm.sh/release-name: ${OPERATOR_NAME}-odoo-hml,
     meta.helm.sh/release-namespace: fleet-local
     # nginx.ingress.kubernetes.io/rewrite-target: /,
     # nginx.ingress.kubernetes.io/use-regex: "true"
