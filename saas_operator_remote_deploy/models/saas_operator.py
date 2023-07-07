@@ -203,7 +203,7 @@ class SaasOperator(models.Model):
         :return (str): Operator status
         """
         try:
-            response = urllib.request.urlopen(f"http://{self.remote_instance_url}")
+            response = urllib.request.urlopen(self.remote_instance_url)
         except (urllib.error.HTTPError, urllib.error.URLError) as error:
             message = f"Operator is not online (Error:{error}). Operator: {self.name}. URL: {self.remote_instance_url}."
             _logger.info(message)
