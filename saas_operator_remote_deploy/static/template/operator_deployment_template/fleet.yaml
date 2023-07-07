@@ -1,7 +1,7 @@
 namespace: fleet-local
 defaultNamespace: fleet-local
 helm:
-  releaseName: erplivre14-odoo-hml
+  releaseName: ${OPERATOR_NAME}-odoo-hml
   chart: ""
   repo: "https://gitlab.kmee.com.br/erplivre/erplivre-odoo-deployment.git"
   version: "14.0.268"

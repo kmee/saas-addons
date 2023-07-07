@@ -123,10 +123,13 @@ class SaasOperator(models.Model):
         return deploy_path
 
     def _prepare_deployment_changes(self, temp_dir, deploy_path, values):
-        values_file_path = os.path.join(deploy_path, 'values.yaml')
+        templates_files = ['values.yaml', 'fleet.yaml']
 
-        with open(values_file_path, 'r+') as values_file:
-            self._fill_in_tamplate_values(values_file, values)
+        for file_path in templates_files:
+            values_file_path = os.path.join(deploy_path, file_path)
+
+            with open(values_file_path, 'r+') as values_file:
+                self._fill_in_tamplate_values(values_file, values)
 
         action_changes = self._generate_actions_changes(temp_dir, deploy_path)
 
