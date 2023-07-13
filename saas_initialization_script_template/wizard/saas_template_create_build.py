@@ -11,10 +11,10 @@ class CreateBuildByTemplate(models.TransientModel):
         for rec in self:
             build_template_id = rec.template_id.build_initialization_template_id
             if build_template_id:
-                copy_init_line_ids = build_template_id.build_post_init_line_ids.copy({
-                    "initialization_template_id" : False,
-                })
-                rec.build_post_init_ids = copy_init_line_ids
+                for line_id in build_template_id.build_post_init_line_ids:
+                    rec.build_post_init_ids += line_id.copy({
+                        "initialization_template_id" : False,
+                    })
 
 
 class BuildPostInit(models.TransientModel):
