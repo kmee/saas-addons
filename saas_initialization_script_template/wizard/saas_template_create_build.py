@@ -11,12 +11,15 @@ class CreateBuildByTemplate(models.TransientModel):
         for rec in self:
             build_template_id = rec.template_id.build_initialization_template_id
             if build_template_id:
-                rec.build_post_init_ids = build_template_id.build_post_init_line_ids
+                for line_id in build_template_id.build_post_init_line_ids:
+                    rec.build_post_init_ids += line_id.copy({
+                        "initialization_template_id" : False,
+                    })
 
 
 class BuildPostInit(models.TransientModel):
     _inherit = 'build.post_init.line'
-    initializateion_template_id = fields.Many2one(
+    initialization_template_id = fields.Many2one(
         comodel_name='saas.initialization.template',
         readonly=True
     )
