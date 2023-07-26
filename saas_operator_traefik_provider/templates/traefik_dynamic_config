@@ -1,0 +1,18 @@
+http:
+  routers:
+    {% for build in builds %}
+    {{build[0]}}:
+      entryPoints:
+        - web
+      rule: 'Host(`{{build[0]}}.local`)'
+      service: {{build[1]}}
+    {% endfor %}
+    
+  ## SERVICES ##
+  services:
+  {% for operator in operators %}
+    {{operator[0]}}:
+      loadBalancer:
+        servers:
+          - url: {{operator[1]}}
+  {% endfor %}
