@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <!-- Queue Job Channel -->
+        <record id="migrate_operator_build_channel" model="queue.job.channel">
+            <field name="name">migrate_operator_build</field>
+            <field name="parent_id" ref="queue_job.channel_root" />
+        </record>
+
+        <!-- Queue Job Function -->
+        <record id="job_function_migrate_operator_build" model="queue.job.function">
+            <field name="model_id" ref="saas_migrate_operator_build.model_saas_migrate_operator_build" />
+            <field name="method">migrate_operator_build</field>
+            <field name="channel_id" ref="migrate_operator_build_channel" />
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<!--# Copyright 2019 Denis Mudarisov <https://www.it-projects.info/team/trojikman>
+    # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).-->
+    <odoo>
+        <record model="ir.ui.view" id="saas_migrate_operator_build">
+            <field name="name">SaaS Migrate Operator Build</field>
+            <field name="model">saas.migrate.operator.build</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="operator_id"/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                        <button name="start_migration" string="Start Migration" type="object" class="oe_highlight" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </odoo>
