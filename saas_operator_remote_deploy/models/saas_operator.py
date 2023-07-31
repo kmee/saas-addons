@@ -14,6 +14,7 @@ import gitlab
 
 from odoo import _, api, fields, models, exceptions
 from odoo.modules.module import get_module_resource
+from odoo.addons.http_routing.models.ir_http import slugify
 
 _logger = logging.getLogger(__name__)
 
@@ -225,3 +226,11 @@ class SaasOperator(models.Model):
             _logger.info(message)
             return ("offline", message)
 
+    def create_db_user(self):
+        user_name = slugify(self.name)
+        cr = self._cr
+        pg_password = os.environ["PGPASSWORD"]
+        query = f"CREATE ROLE {user_name} WITH LOGIN CREATEDB PASSWORD '{pg_password}'"
+
+        cr.execute(query)
+        cr.commit()
