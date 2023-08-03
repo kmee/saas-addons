@@ -9,6 +9,9 @@ class SAASDB(models.Model):
     _name = 'saas.db'
     _inherit = 'mail.thread'
     _description = 'Build'
+    _sql_constraints = [
+        ("name_unique", "unique(name)", "There is already a build with that name!")
+    ]
 
     name = fields.Char('Name', help='Technical Database name', readonly=True)
     operator_id = fields.Many2one('saas.operator', required=True)
