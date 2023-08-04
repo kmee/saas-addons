@@ -18,6 +18,7 @@
         'security/ir.model.access.csv',
         'data/job_queue.xml',
         'views/saas_db.xml',
+        'views/res_config_settings.xml',
         'wizard/saas_migrate_operator_build.xml',
     ],
     'demo': [

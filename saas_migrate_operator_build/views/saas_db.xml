@@ -16,6 +16,12 @@
                     type="object"
                     groups="saas.group_manager"
                 />
+                <button
+                    name="change_build_db_owner"
+                    string="Change build DB Owner"
+                    type="object"
+                    groups="base.group_no_one"
+                />
             </button>
         </field>
     </record>

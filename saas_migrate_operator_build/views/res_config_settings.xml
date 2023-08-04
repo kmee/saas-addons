@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 KMEE
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="res_config_settings_form_view">
+        <field name="name">res.config.settings.form (in saas_migrate_operator_build)</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="saas.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='saas']" position="inside">
+                <h2>Migrate Operator Build</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <label for="remote_operator_db_host"/>
+                            <div class="text-muted">
+                                <field name="remote_operator_db_host"/>
+                            </div>
+                            <label for="remote_operator_db_port"/>
+                            <div class="text-muted">
+                                <field name="remote_operator_db_port"/>
+                            </div>
+                            <label for="remote_operator_db_superuser"/>
+                            <div class="text-muted">
+                                <field name="remote_operator_db_superuser"/>
+                            </div>
+                            <label for="remote_operator_db_superuser_password"/>
+                            <div class="text-muted">
+                                <field name="remote_operator_db_superuser_password"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+
+</odoo>
