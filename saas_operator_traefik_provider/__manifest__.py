@@ -16,6 +16,7 @@
         "base_rest",
     ],
     'data': [
+        'views/res_config_settings.xml',
     ],
     'demo': [
     ],
