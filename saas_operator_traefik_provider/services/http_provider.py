@@ -1,10 +1,10 @@
 import logging
-from functools import lru_cache
 from jinja2 import Environment, FileSystemLoader
 
-from odoo.http import route
+from odoo.http import route, request
 from odoo.addons.component.core import Component
 from odoo.modules.module import get_module_resource
+from odoo.addons.web.controllers.main import content_disposition
 
 from odoo.addons.base_rest import restapi
 
@@ -45,8 +45,12 @@ class HTTPProviderService(Component):
             lambda record: (record.name, record.operator_id.name)
         )
 
-        config_params = self.env['ir.config_parameter']
+        config_params = self.env['ir.config_parameter'].sudo()
         remote_domain = config_params.get_param('traefik_operator_domain', '')
-        return render_template(operators, builds, remote_domain)
+        file_content = render_template(operators, builds, remote_domain)
+
+        content_type = ('Content-Type', 'application/octet-stream')
+        disposition_content = ('Content-Disposition', content_disposition('dynamic_config.yaml'))
+        return request.make_response(file_content, [content_type, disposition_content])
 
 
