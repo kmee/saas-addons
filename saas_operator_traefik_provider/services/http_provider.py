@@ -16,10 +16,11 @@ environment = Environment(loader=FileSystemLoader(DYNAMIC_CONFIG_PATH))
 template = environment.get_template("traefik_dynamic_config")
 
 
-def render_template(operators, builds):
+def render_template(operators, builds, remote_domain):
     return template.render(
         operators=operators,
-        builds=builds
+        builds=builds,
+        remote_domain=remote_domain,
     )
 
 
@@ -43,6 +44,9 @@ class HTTPProviderService(Component):
         builds = build_ids.mapped(
             lambda record: (record.name, record.operator_id.name)
         )
-        return render_template(operators, builds)
+
+        config_params = self.env['ir.config_parameter']
+        remote_domain = config_params.get_param('traefik_operator_domain', '')
+        return render_template(operators, builds, remote_domain)
 
 

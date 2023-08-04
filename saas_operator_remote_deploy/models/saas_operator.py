@@ -230,7 +230,7 @@ class SaasOperator(models.Model):
         user_name = slugify(self.name)
         cr = self._cr
         pg_password = os.environ["PGPASSWORD"]
-        query = f"CREATE ROLE {user_name} WITH LOGIN CREATEDB PASSWORD '{pg_password}'"
+        query = f"CREATE ROLE '{user_name}' WITH LOGIN CREATEDB PASSWORD '{pg_password}'"
 
         cr.execute(query)
         cr.commit()
