@@ -38,12 +38,6 @@ STATES = [
     ('error', 'Error')
 ]
 
-def sanitize_string(string):
-    string = string.replace(' ', '-')
-    string = string.replace('.', '-')
-    string = normalize('NFKD', string)
-    return string
-
 
 class SaasOperator(models.Model):
 
@@ -70,7 +64,7 @@ class SaasOperator(models.Model):
         """
 
         values = {
-            'version': sanitize_string(self.name),
+            'version': slugify(self.name),
             'image_tag': self.version_id.image_tag,
         }
 
