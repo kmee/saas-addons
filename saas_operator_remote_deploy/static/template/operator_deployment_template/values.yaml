@@ -9,13 +9,13 @@ image:
 imagePullSecrets:
   - name: registry-erplivre-all
 
-nameOverride: "${OPERATOR_NAME}-odoo-hml"
-fullnameOverride: "${OPERATOR_NAME}-odoo-hml"
+nameOverride: "${OPERATOR_NAME}-odoo-${ENV}"
+fullnameOverride: "${OPERATOR_NAME}-odoo-${ENV}"
 
 serviceAccount:
   create: true
   annotations: {}
-  name: "${OPERATOR_NAME}-odoo-hml"
+  name: "${OPERATOR_NAME}-odoo-${ENV}"
 
 podAnnotations: {}
 
@@ -43,7 +43,7 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "720s",
     nginx.ingress.kubernetes.io/proxy-send-timeout: "720s",
     nginx.ingress.kubernetes.io/proxy-read-timeout: "1200s",
-    meta.helm.sh/release-name: ${OPERATOR_NAME}-odoo-hml,
+    meta.helm.sh/release-name: ${OPERATOR_NAME}-odoo-${ENV},
     meta.helm.sh/release-namespace: fleet-local
     # nginx.ingress.kubernetes.io/rewrite-target: /,
     # nginx.ingress.kubernetes.io/use-regex: "true"
@@ -82,7 +82,7 @@ ingress:
    - secretName: wildcard-erplivre
      hosts:
        - "*.erplivre.com.br"
-   - secretName: erplivre-saas-14-odoo-hml-tls
+   - secretName: erplivre-saas-14-odoo-${ENV}-tls
      hosts:
        - "${OPERATOR_NAME}.kmee.dev.br"
   loadBalancer:
@@ -117,13 +117,13 @@ preCreateDataBase:
   PGHOST: "10.10.6.163"
   PGUSER: "odoo"
   PGPASSWORD: "odoo"
-  #PGDATABASE: "erplivre14-odoo-hml"
+  #PGDATABASE: "erplivre14-odoo-${ENV}"
 
 odoo:
   - name: EMAIL_FROM
     value: "bot@mail.erplivre.com.br"
   - name: SMTP_SERVER
-    #value: "erplivre14-odoo-hml-smtp"
+    #value: "erplivre14-odoo-${ENV}-smtp"
     value: "mg-saas-01.erplivre.com.br"
   - name: SMTP_PORT
     value: "25"
@@ -166,7 +166,7 @@ odoo:
   - name: ODOO_SESSION_REDIS_HOST
     value: "10.10.6.156"
   - name: ODOO_SESSION_REDIS_PREFIX
-    value: "${OPERATOR_NAME}-odoo-hml"
+    value: "${OPERATOR_NAME}-odoo-${ENV}"
   - name: ODOO_SESSION_REDIS_PASSWORD
     value: "RV06LACREVE796QWC2DM"
   - name: SUPER_ADMIN_PASSWORD
@@ -178,7 +178,7 @@ odoo:
   - name: GELF_PORT
     value: "21201"
   - name: GELF_LOCALNAME
-    value: "${OPERATOR_NAME}-odoo-hml"
+    value: "${OPERATOR_NAME}-odoo-${ENV}"
   - name: RUNNING_ENV
     value: "hml"
   - name: MARABUNTA_MODE
@@ -210,7 +210,7 @@ odoo:
 
 smtp:
   enabled: false
-  name: ${OPERATOR_NAME}-odoo-hml-smtp
+  name: ${OPERATOR_NAME}-odoo-${ENV}-smtp
   serviceType: NodePort
   image: tecnativa/postfix-relay
   pullPolicy: Always

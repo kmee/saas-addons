@@ -8,6 +8,7 @@ class ResConfigSettings(models.TransientModel):
 
     _inherit = "res.config.settings"
 
+    operator_env = fields.Char(string='Operator Env', config_parameter='operator_env')
     gitlab_url = fields.Char(string='GitLab URL', config_parameter='gitlab_url')
     gitlab_private_token = fields.Char(string='GitLab Private Token', config_parameter='gitlab_private_token')
     gitlab_deployment_repo = fields.Char(string='GitLab Deplyment Repo', config_parameter='gitlab_deployment_repo')
