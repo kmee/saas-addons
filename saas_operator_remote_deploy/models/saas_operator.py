@@ -62,10 +62,13 @@ class SaasOperator(models.Model):
         Deploys a new Odoo instance using a deployment GitLab repository
             monitored by Rancher Fleet
         """
+        config_params = self.env['ir.config_parameter']
+        operator_env = config_params.get_param('operator_env', '')
 
         values = {
             'version': slugify(self.name),
             'image_tag': self.version_id.image_tag,
+            'env': operator_env,
         }
 
         if not self._is_all_config_params_valid():
@@ -137,7 +140,8 @@ class SaasOperator(models.Model):
         template_obj = Template(file_content)
         new_file_content = template_obj.safe_substitute(
             TAG=values.get('image_tag'),
-            OPERATOR_NAME=values.get('version')
+            OPERATOR_NAME=values.get('version'),
+            ENV=values.get('env'),
         )
 
         # Override file content
