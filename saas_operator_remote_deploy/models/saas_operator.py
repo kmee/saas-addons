@@ -77,7 +77,6 @@ class SaasOperator(models.Model):
         deploy_repo = self._get_gitlab_deploy_repo()
         changes_action = self._prepare_deployment(values)
         self._commit_deployment(deploy_repo, changes_action, values)
-        self.update_remote_operator_status()
 
     def _is_all_config_params_valid(self):
         for param in CONFIG_PARAMS:
