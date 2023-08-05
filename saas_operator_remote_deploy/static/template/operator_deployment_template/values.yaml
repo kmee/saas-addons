@@ -142,7 +142,7 @@ odoo:
   - name: PGHOST
     value: "10.10.6.206"
   - name: PGUSER
-    value: "odoo"
+    value: "${OPERATOR_NAME}"
   - name: PGPASSWORD
     value: "mudar@123"
   - name: PGDATABASE
