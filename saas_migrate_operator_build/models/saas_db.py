@@ -47,24 +47,24 @@ class SaasDb(models.Model):
                 cursor.execute(query)
                 rows = cursor.fetchall()
                 for row in rows:
-                    query = f"ALTER TABLE {row[0]} OWNER TO {new_owner}"
+                    query = f'ALTER TABLE {row[0]} OWNER TO "{new_owner}"'
                     cursor.execute(query)
 
             query = "SELECT DISTINCT quote_ident(table_schema) FROM information_schema.tables WHERE table_schema != 'pg_catalog';"
             cursor.execute(query)
             rows = cursor.fetchall()
             for row in rows:
-                query = f"ALTER SCHEMA {row[0]} OWNER TO {new_owner}"
+                query = f'ALTER SCHEMA {row[0]} OWNER TO "{new_owner}"'
                 cursor.execute(query)
 
             query = "SELECT quote_ident(n.nspname) || '.' || quote_ident(p.proname) || '(' || pg_catalog.pg_get_function_identity_arguments(p.oid) || ')' FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace WHERE n.nspname != 'pg_catalog';"
             cursor.execute(query)
             rows = cursor.fetchall()
             for row in rows:
-                query = f"ALTER FUNCTION {row[0]} OWNER TO {new_owner}"
+                query = f'ALTER FUNCTION {row[0]} OWNER TO "{new_owner}"'
                 cursor.execute(query)
 
-            query = f'ALTER DATABASE "{db_name}" OWNER TO {new_owner}'
+            query = f'ALTER DATABASE "{db_name}" OWNER TO "{new_owner}"'
             cursor.execute(query)
 
             conn.commit()
