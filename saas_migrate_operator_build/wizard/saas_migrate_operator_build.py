@@ -9,7 +9,11 @@ _logger = logging.getLogger(__name__)
 class MigrateOperatorBuild(models.TransientModel):
     _name = 'saas.migrate.operator.build'
 
-    operator_id = fields.Many2one('saas.operator', string='Operator')
+    operator_id = fields.Many2one(
+        comodel_name='saas.operator',
+        string='Operator',
+        domain="[('state', '=', 'online'), ('type', '=', 'remote')]",
+    )
 
     def start_migration(self):
         selected_ids = self.env.context.get('active_ids', [])
