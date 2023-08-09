@@ -30,7 +30,7 @@
                             </div>
                             <label for="gitlab_private_token"/>
                             <div class="text-muted">
-                                <field name="gitlab_private_token"/>
+                                <field name="gitlab_private_token" password="True"/>
                             </div>
                             <label for="gitlab_deployment_repo"/>
                             <div class="text-muted">
