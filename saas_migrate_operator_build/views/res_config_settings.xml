@@ -28,7 +28,7 @@
                             </div>
                             <label for="remote_operator_db_superuser_password"/>
                             <div class="text-muted">
-                                <field name="remote_operator_db_superuser_password"/>
+                                <field name="remote_operator_db_superuser_password" password="True"/>
                             </div>
                         </div>
                     </div>
