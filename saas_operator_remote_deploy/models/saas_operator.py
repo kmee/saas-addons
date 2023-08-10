@@ -76,6 +76,7 @@ class SaasOperator(models.Model):
 
         deploy_repo = self._get_gitlab_deploy_repo()
         changes_action = self._prepare_deployment(values)
+        self.create_db_user()
         self._commit_deployment(deploy_repo, changes_action, values)
         self.state = 'offline'
 
