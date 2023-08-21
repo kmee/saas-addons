@@ -3,7 +3,7 @@ http:
     {% for build in builds %}
     {{build[0]}}:
       entryPoints:
-        - web
+        - websecure
       rule: 'Host(`{{build[0]}}.{{remote_domain}}`)'
       service: {{build[1]}}
     {% endfor %}
