@@ -9,12 +9,13 @@ class CreateBuildByTemplate(models.TransientModel):
     @api.onchange('template_id')
     def _onchange_build_post_init_ids(self):
         for rec in self:
-            build_template_id = rec.template_id.build_initialization_template_id
-            if build_template_id:
-                for line_id in build_template_id.build_post_init_line_ids:
-                    rec.build_post_init_ids += line_id.copy({
-                        "initialization_template_id" : False,
-                    })
+            build_template_ids = rec.template_id.build_initialization_template_ids
+            for build_template_id in build_template_ids:
+                if build_template_id:
+                    for line_id in build_template_id.build_post_init_line_ids:
+                        rec.build_post_init_ids += line_id.copy({
+                            "initialization_template_id" : False,
+                        })
 
 
 class BuildPostInit(models.TransientModel):

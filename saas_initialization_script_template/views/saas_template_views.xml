@@ -6,10 +6,10 @@
         <field name="inherit_id" ref="saas.saas_template_form_view" />
         <field name="arch" type="xml">
             <field name="template_post_init" position='before'>
-                <field name='template_initialization_template_id' domain="[('initialization_type','=','template')]"/>
+                <field name='template_initialization_template_ids' widget="many2many_tags" domain="[('initialization_type','=','template')]"/>
             </field>
             <field name="build_post_init" position='before'>
-                <field name='build_initialization_template_id' domain="[('initialization_type','=','build')]"/>
+                <field name='build_initialization_template_ids' widget="many2many_tags" domain="[('initialization_type','=','build')]"/>
             </field>
         </field>
     </record>
