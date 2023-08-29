@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 KMEE
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="saas_operator_form_view">
+        <field name="name">saas.operator.form (in saas_mandatory_modules)</field>
+        <field name="model">saas.operator</field>
+        <field name="inherit_id" ref="saas.saas_operator_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='global_url']/.." position="after">
+                <group string="Mandatory Modules">
+                    <field name="mandatory_modules_ids" widget="many2many_tags" string="Mandatory Modules"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
