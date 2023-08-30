@@ -24,6 +24,18 @@ class SaasOperator(models.Model):
             },
         )
 
+    def save_checksums(self, db_name):
+        if self.type != "remote":
+            return
+
+        jsonrpc(
+            self.remote_instance_url + "/saas_operator/save_checksums",
+            {
+                "master_pwd": self.remote_master_pwd,
+                "db_name": db_name,
+            },
+        )
+
     def close_db_connection(self, db_name):
         if self.type != "remote":
             return
