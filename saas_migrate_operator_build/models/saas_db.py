@@ -26,6 +26,7 @@ class SaasDb(models.Model):
         }
 
     def change_build_db_owner(self):
+        self.operator_id.close_db_connection(self.name)
         self._change_database_owner(self.name, self.operator_id.name)
 
     def auto_update_modules(self):
