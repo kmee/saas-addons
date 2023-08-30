@@ -23,3 +23,15 @@ class SaasOperator(models.Model):
                 "db_name": db_name,
             },
         )
+
+    def close_db_connection(self, db_name):
+        if self.type != "remote":
+            return
+
+        jsonrpc(
+            self.remote_instance_url + "/saas_operator/close_db_connection",
+            {
+                "master_pwd": self.remote_master_pwd,
+                "db_name": db_name,
+            },
+        )
