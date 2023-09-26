@@ -4,7 +4,7 @@ image:
   repository: registry.kmee.com.br/erplivre/erplivre-odoo
   tag: "${TAG}"
   pullPolicy: IfNotPresent
-  
+
 
 imagePullSecrets:
   - name: registry-erplivre-all
@@ -57,7 +57,7 @@ ingress:
           name: http
           port: 8069
         - path: /longpooling
-          pathType: ImplementationSpecific        
+          pathType: ImplementationSpecific
           name: longpooling
           port: 8072
     - host: "*.erplivre.com.br"
@@ -68,7 +68,7 @@ ingress:
           name: http
           port: 8069
         - path: /longpooling
-          pathType: ImplementationSpecific        
+          pathType: ImplementationSpecific
           name: longpooling
           port: 8072
     # - host: erplivre.com.br
@@ -141,12 +141,16 @@ odoo:
     value: "qwbJFnj4i@$%##@#!owVr1G3cimPvzYQ!!!mODYXTB"
   - name: PGHOST
     value: "10.10.6.206"
+  - name: PGPORT
+    value: "6432"
   - name: PGUSER
     value: "${OPERATOR_NAME}"
   - name: PGPASSWORD
-    value: "mudar@123"
+    value: "AY6m&y&SQQWHv2P"
   - name: PGDATABASE
     value: "False"
+  - name: PG_DB_TEMPLATE
+    value: "template-saas"
   - name: AWS_HOST
     value: "s3.wasabisys.com"
   - name: AWS_REGION
@@ -180,7 +184,7 @@ odoo:
   - name: GELF_LOCALNAME
     value: "${OPERATOR_NAME}-odoo-${ENV}"
   - name: RUNNING_ENV
-    value: "hml"
+    value: "integration"
   - name: MARABUNTA_MODE
     value: "hml"
   - name: DEMO
@@ -246,6 +250,6 @@ smtp:
   affinity: {}
   podSecurityContext: {}
   securityContext:
-    capabilities: 
+    capabilities:
       - SYS_PTRACE
   annotations: {}
