@@ -49,7 +49,17 @@ class SAASInitializationTemplate(models.Model):
         help='Python code to be executed once build db is created from template')
 
     build_post_init_line_ids = fields.One2many(
-        'build.post_init.line', 'initialization_template_id',
+        'build.post_init.line.persistent', 'initialization_template_id',
         string="Build Initialization Values",
         help="These values will be used on execution template's Build Initialization code"
+    )
+
+class BuildPostInitPersistent(models.Model):
+    _name = 'build.post_init.line.persistent'
+    _description = 'Build post init line persistent'
+    key = fields.Char()
+    value = fields.Char()
+    initialization_template_id = fields.Many2one(
+        comodel_name='saas.initialization.template',
+        readonly=True
     )

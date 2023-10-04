@@ -4,8 +4,6 @@ from odoo import api, models, fields
 class CreateBuildByTemplate(models.TransientModel):
     _inherit = 'saas.template.create_build'
 
-    # build_post_init_ids = fields.One2many(compute='_compute_build_post_init_ids')
-
     @api.onchange('template_id')
     def _onchange_build_post_init_ids(self):
         for rec in self:
@@ -13,9 +11,16 @@ class CreateBuildByTemplate(models.TransientModel):
             for build_template_id in build_template_ids:
                 if build_template_id:
                     for line_id in build_template_id.build_post_init_line_ids:
-                        rec.build_post_init_ids += line_id.copy({
-                            "initialization_template_id" : False,
-                        })
+                        vals = line_id.read()
+                        line = self.env['build.post_init.line'].create(self._prepare_build_post_init_line_vals(vals[0]))
+                        rec.build_post_init_ids += line
+
+    def _prepare_build_post_init_line_vals(self, vals):
+        out = {}
+        out['key'] = vals['key']
+        out['value'] = vals['value']
+        return out
+
 
 
 class BuildPostInit(models.TransientModel):

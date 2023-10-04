@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 user_access_saas_initialization_template,user_access_saas_initialization_template,model_saas_initialization_template,saas.group_user,1,0,0,0
 manager_access_saas_initialization_template,manager_access_saas_initialization_template,model_saas_initialization_template,saas.group_manager,1,1,1,1
+access_build_post_init_line_persistent,access_build_post_init_line_persistent,model_build_post_init_line_persistent,base.group_user,1,1,1,1
